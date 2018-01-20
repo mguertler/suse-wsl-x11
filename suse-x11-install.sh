@@ -28,7 +28,7 @@ zypper ref; zypper -y up
 echo ""
 echo "--- Installing patterns & packages ---"
 echo ""
-zypper install -y -t pattern yast2_basis x11 xfce
+zypper install -y --recommends -t pattern yast2_basis x11 xfce gnome_basis
 
 echo ""
 echo "--- Configuring display forwarding ---"
@@ -50,8 +50,11 @@ echo ""
 echo "--- Fixing d-bus issue ---"
 echo ""
 
-sudo mkdir /var/run/dbus
-sudo sed -i 's$<listen>.*</listen>$<listen>tcp:host=localhost,port=0</listen>$' /etc/dbus-1/session.conf
+mkdir /var/run/dbus
+
+cp /etc/dbus-1/session.conf /etc/dbus-1/session.conf.wsl.bak
+sed -i 's$<listen>.*</listen>$<listen>tcp:host=localhost,port=0</listen>$' /etc/dbus-1/session.conf
+sed -i 's$<auth>.*</auth>$<auth>ANONYMOUS</auth>\n  <allow_anonymous/>$' /etc/dbus-1/session.conf
 
 echo ""
 echo "--- Downloading vcXsrv ---"
