@@ -1,0 +1,34 @@
+#!/bin/bash
+#
+#
+POWERSHELL=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
+
+echo ""
+echo "--- Starting vcXsrv if it is not running ---"
+echo ""
+
+OUT=$($POWERSHELL -command "Get-Process -name 'vcxsrv' | Format-List ProcessName" |grep "vcxsrv")
+if [ -n "$OUT" ]; then
+	echo ""
+	echo "VcXsrv already running."
+	echo ""
+else
+	"/mnt/c/Program Files/VcXsrv/vcxsrv.exe" :0 -ac -terminate -lesspointer -multiwindow -clipboard -wgl
+fi
+
+
+# Calculate new x-position (approx middle of the screen)  for XFCE start panel based on screen resolution
+X_RES="\s*([[:digit:]]+)x([[:digit:]]+)"
+if [[ "$(xrandr | grep '*')" =~ $X_RES ]]; then
+	X_POS=$(expr ${BASH_REMATCH[1]} / 2 - 60)
+fi
+
+FILE=~/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+sed -e "s/<property name=\"position\" type=\"string\" value=\"p=\(.\+\);x=\(.\+\);y=\(.\+\)\"\/>/<property name=\"position\" type=\"string\" value=\"p=\1;x=$X_POS;y=\3\"\/>/" $FILE >$FILE.new
+mv $FILE.new $FILE
+
+echo ""
+echo "--- Starting XFCE session ---"
+echo ""
+
+startxfce4
