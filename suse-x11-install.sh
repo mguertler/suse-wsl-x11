@@ -20,6 +20,14 @@
 #
 #
 
+if [[ $EUID -ne 0 ]]; then
+	echo "You have to be user root to execute this script!"
+	sudo $0
+	exit 0
+fi
+
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
 echo ""
 echo "--- Updating system ---"
 echo ""
@@ -29,6 +37,7 @@ echo ""
 echo "--- Installing patterns & packages ---"
 echo ""
 zypper install -y --recommends -t pattern yast2_basis x11 xfce gnome_basis
+zypper install -y gnome-terminal
 
 echo ""
 echo "--- Configuring display forwarding ---"
@@ -38,11 +47,11 @@ USERS=$(ls -d /home/*)
 USERS="$USERS /root"
 
 for USER in $USERS; do
-	if grep -Fxq "export DISPLAY=\":0" $USER/.bashrc
+	if grep -Fxq "export DISPLAY=\":0\"" $USER/.bashrc
 	then
 		echo "Info: Display forwarding already setup for $USER"
 	else
-		echo "export DISPLAY=\":0" >>$USER/.bashrc
+		echo "export DISPLAY=\":0\"" >>$USER/.bashrc
 	fi
 done
 
@@ -67,7 +76,9 @@ mv /tmp/$LATEST /mnt/c/Windows/Temp
 echo ""
 echo "!!!                                                  !!!"
 echo "!!! The installation script would now install vcXsrv !!!"
-echo "!!!              Press any key to continue           !!!"
+echo "!!!     This requires Adminstrator privileges        !!!"
+echo "!!!                                                  !!!"
+echo "!!!            Press any key to continue             !!!"
 echo "!!!                                                  !!!"
 echo ""
 
@@ -77,3 +88,17 @@ echo ""
 echo "--- Installing vcXsrv ---"
 echo ""
 $CMD /c "c:/Windows/Temp/$LATEST /S"
+
+echo ""
+echo "--- Preparing xfce4 environment ---"
+echo ""
+[ ! -d /etc/xdg.orig ] && cp -rpv /etc/xdg /etc/xdg.orig
+cp -rpv $SCRIPTPATH/config-files/xfce4-session.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml
+
+[ ! -d ./config/xfce4.orig ] && mv ./config/xfce4 ./config/xfce4.orig
+cp -rpv SCRIPTPATH/config-files/xfce4 ./config
+
+echo ""
+echo "All done. Start X11 graphical userinterface with the command"
+echo "winx"
+echo ""
