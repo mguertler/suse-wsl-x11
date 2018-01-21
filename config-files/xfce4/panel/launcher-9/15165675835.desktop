@@ -1,0 +1,24 @@
+[Desktop Entry]
+X-SuSE-translate=true
+Name=Files
+Comment=Access and organize files
+Keywords=folder;manager;explore;disk;filesystem;
+Exec=nautilus --new-window %U
+Icon=system-file-manager
+Terminal=false
+Type=Application
+DBusActivatable=true
+StartupNotify=true
+Categories=GNOME;GTK;Utility;Core;FileManager;
+MimeType=inode/directory;application/x-gnome-saved-search;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=nautilus
+X-GNOME-Bugzilla-Component=general
+X-GNOME-Bugzilla-Version=3.20.3
+X-GNOME-UsesNotifications=true
+Actions=new-window;
+X-XFCE-Source=file:///usr/share/applications/org.gnome.Nautilus.desktop
+
+[Desktop Action new-window]
+Name=New Window
+Exec=nautilus --new-window
