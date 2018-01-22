@@ -13,7 +13,8 @@ if [ -n "$OUT" ]; then
 	echo "VcXsrv already running."
 	echo ""
 else
-	"/mnt/c/Program Files/VcXsrv/vcxsrv.exe" :0 -ac -terminate -lesspointer -multiwindow -clipboard -wgl
+	"/mnt/c/Program Files/VcXsrv/vcxsrv.exe" :0 -ac -terminate -lesspointer -multiwindow -clipboard -wgl &
+	sleep 5
 fi
 
 

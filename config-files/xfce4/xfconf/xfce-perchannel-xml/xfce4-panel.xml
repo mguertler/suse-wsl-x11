@@ -4,7 +4,7 @@
   <property name="configver" type="empty"/>
   <property name="panels" type="empty">
     <property name="panel-1" type="empty">
-      <property name="position" type="string" value="p=11;x=913;y=21"/>
+      <property name="position" type="string" value="p=11;x=900;y=21"/>
       <property name="length" type="uint" value="5"/>
       <property name="position-locked" type="bool" value="false"/>
       <property name="size" type="uint" value="40"/>
@@ -16,7 +16,7 @@
         <value type="int" value="5"/>
         <value type="int" value="8"/>
         <value type="int" value="9"/>
-        <value type="int" value="7"/>
+        <value type="int" value="6"/>
         <value type="int" value="4"/>
       </property>
       <property name="autohide-behavior" type="uint" value="2"/>
@@ -69,9 +69,11 @@
         <value type="string" value="15165675573.desktop"/>
       </property>
     </property>
-    <property name="plugin-6" type="empty"/>
+    <property name="plugin-6" type="string" value="systray">
+      <property name="show-frame" type="bool" value="true"/>
+    </property>
     <property name="plugin-13" type="empty"/>
-    <property name="plugin-7" type="string" value="separator">
+    <property name="plugin-7" type="empty">
       <property name="show-frame" type="empty"/>
     </property>
     <property name="plugin-8" type="string" value="launcher">
