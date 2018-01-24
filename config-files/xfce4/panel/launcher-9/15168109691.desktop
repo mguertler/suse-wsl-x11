@@ -1,0 +1,13 @@
+[Desktop Entry]
+X-SuSE-translate=true
+Name=Thunar File Manager
+Comment=Browse the filesystem with the file manager
+GenericName=File Manager
+Exec=thunar %F
+Icon=system-file-manager
+Terminal=false
+StartupNotify=true
+Type=Application
+Categories=System;Utility;Core;GTK;FileManager;System;
+X-XFCE-Source=file:///usr/share/applications/thunar.desktop
+Path=

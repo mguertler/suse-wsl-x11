@@ -33,7 +33,7 @@
   <property name="plugins" type="empty">
     <property name="plugin-1" type="empty">
       <property name="button-icon" type="string" value="xfce4-suse"/>
-      <property name="button-title" type="empty"/>
+      <property name="button-title" type="string" value="openSUSE"/>
       <property name="show-tooltips" type="empty"/>
       <property name="custom-menu" type="bool" value="false"/>
       <property name="show-button-title" type="bool" value="true"/>
@@ -71,6 +71,11 @@
     </property>
     <property name="plugin-6" type="string" value="systray">
       <property name="show-frame" type="bool" value="true"/>
+      <property name="names-visible" type="array">
+        <value type="string" value="vlc"/>
+        <value type="string" value="networkmanager applet"/>
+        <value type="string" value="pragha music player"/>
+      </property>
     </property>
     <property name="plugin-13" type="empty"/>
     <property name="plugin-7" type="empty">
@@ -84,7 +89,7 @@
     <property name="plugin-9" type="string" value="launcher">
       <property name="style" type="empty"/>
       <property name="items" type="array">
-        <value type="string" value="15165675835.desktop"/>
+        <value type="string" value="15168109691.desktop"/>
       </property>
     </property>
     <property name="plugin-10" type="empty">
