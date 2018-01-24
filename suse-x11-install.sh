@@ -27,6 +27,10 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+CMD="/mnt/c/Windows/System32/cmd.exe"
+WINPATH_TEMPDIR=$($POWERSHELL -C "Write-Host \$env:TEMP")
+LINPATH_TEMPDIR=echo $WINPATH_TEMPDIR | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g"
 
 echo ""
 echo "--- Updating system ---"
@@ -68,10 +72,9 @@ sed -i 's$<auth>.*</auth>$<auth>ANONYMOUS</auth>\n  <allow_anonymous/>$' /etc/db
 echo ""
 echo "--- Downloading vcXsrv ---"
 echo ""
-CMD="/mnt/c/Windows/System32/cmd.exe"
 LATEST="vcxsrv-latest.exe"
 wget -O /tmp/$LATEST https://sourceforge.net/projects/vcxsrv/files/latest/download
-mv /tmp/$LATEST /mnt/c/Windows/Temp
+mv /tmp/$LATEST $WINPATH_TEMPDIR
 
 echo ""
 echo "!!!                                                  !!!"
@@ -87,7 +90,7 @@ read -n 1 -s -r
 echo ""
 echo "--- Installing vcXsrv ---"
 echo ""
-$CMD /c "c:/Windows/Temp/$LATEST /S"
+$CMD /c "$LINPATH_TEMPDIR/$LATEST /S"
 
 echo ""
 echo "--- Preparing xfce4 environment ---"
