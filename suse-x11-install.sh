@@ -33,6 +33,8 @@ POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 CMD="/mnt/c/Windows/System32/cmd.exe"
 WINPATH_TEMPDIR=$($POWERSHELL -C "Write-Host \$env:TEMP")
 LINPATH_TEMPDIR=echo $WINPATH_TEMPDIR | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g"
+WINPATH_APPDATA_openSUSE=$($POWERSHELL -C "Write-Host \$env:LOCALAPPDATA\openSUSE")
+LINPATH_APPDATA_openSUSE=echo $WINPATH_LOCAL_APPDATA | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g"
 
 echo ""
 echo "--- Downloading vcXsrv ---"
@@ -112,6 +114,10 @@ cp -rpv $CONFIGPATH/xfce4-session.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml
 
 [ ! -d ./config/xfce4.orig ] && mv ./config/xfce4 ./config/xfce4.orig
 cp -rpv $CONFIGPATH/xfce4 ./config
+
+echo ""
+echo "--- Installing Pulseaudio for Windows ---"
+echo ""
 
 echo ""
 echo "All done. Start X11 graphical userinterface with the command"
