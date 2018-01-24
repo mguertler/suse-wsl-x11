@@ -27,47 +27,12 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+CONFIGPATH="$SCRIPTPATH/config-files"
+MISCPATH="$SCRIPTPATH/misc-files"
 POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 CMD="/mnt/c/Windows/System32/cmd.exe"
 WINPATH_TEMPDIR=$($POWERSHELL -C "Write-Host \$env:TEMP")
 LINPATH_TEMPDIR=echo $WINPATH_TEMPDIR | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g"
-
-echo ""
-echo "--- Updating system ---"
-echo ""
-zypper ref; zypper -y up
-
-echo ""
-echo "--- Installing patterns & packages ---"
-echo ""
-zypper install -y --recommends -t pattern yast2_basis x11 xfce gnome_basis
-zypper install -y gnome-terminal
-
-echo ""
-echo "--- Configuring display forwarding ---"
-echo ""
-
-USERS=$(ls -d /home/*)
-USERS="$USERS /root"
-
-for USER in $USERS; do
-	if grep -Fxq "export DISPLAY=\":0\"" $USER/.bashrc
-	then
-		echo "Info: Display forwarding already setup for $USER"
-	else
-		echo "export DISPLAY=\":0\"" >>$USER/.bashrc
-	fi
-done
-
-echo ""
-echo "--- Fixing d-bus issue ---"
-echo ""
-
-mkdir /var/run/dbus
-
-cp /etc/dbus-1/session.conf /etc/dbus-1/session.conf.wsl.bak
-sed -i 's$<listen>.*</listen>$<listen>tcp:host=localhost,port=0</listen>$' /etc/dbus-1/session.conf
-sed -i 's$<auth>.*</auth>$<auth>ANONYMOUS</auth>\n  <allow_anonymous/>$' /etc/dbus-1/session.conf
 
 echo ""
 echo "--- Downloading vcXsrv ---"
@@ -92,14 +57,61 @@ echo "--- Installing vcXsrv ---"
 echo ""
 $CMD /c "$LINPATH_TEMPDIR/$LATEST /S"
 
+
+echo ""
+echo "--- Updating system ---"
+echo ""
+zypper ref; zypper -y up
+
+echo ""
+echo "--- Installing patterns & packages ---"
+echo ""
+zypper install -y --recommends -t pattern yast2_basis x11 xfce gnome_basis
+zypper install -y gnome-terminal
+
+echo ""
+echo "--- Configuring display forwarding and LIBGL rendering ---"
+echo ""
+
+USERS=$(ls -d /home/*)
+USERS="$USERS /root /etc/skel"
+
+for USER in $USERS; do
+	# Display Forwarding
+	if grep -Fxq "export DISPLAY=\":0\"" $USER/.bashrc
+	then
+		echo "Info: Display forwarding already setup for $USER"
+	else
+		echo "export DISPLAY=\":0\"" >>$USER/.bashrc
+	fi
+	# LIBGL
+	if grep -Fxq "export LIBGL_ALWAYS_INDIRECT=\"true\"" $USER/.bashrc
+	then
+		echo "Info: LIBGL_ALWAYS_INDIRECT already setup for $USER"
+	else
+		echo "export LIBGL_ALWAYS_INDIRECT=\"true\"" >>$USER/.bashrc
+	fi
+done
+
+echo ""
+echo "--- Fixing d-bus issue ---"
+echo ""
+
+mkdir -p /var/run/dbus
+
+cp -n /etc/dbus-1/session.conf /etc/dbus-1/session.conf.wsl.bak
+sed -i 's$<listen>.*</listen>$<listen>tcp:host=localhost,port=0</listen>$' /etc/dbus-1/session.conf
+sed -i 's$<auth>.*</auth>$<auth>ANONYMOUS</auth>$' /etc/dbus-1/session.conf
+if ! grep -Fq '<allow_anonymous/>' /etc/dbus-1/session.conf; then sed -i 's$<auth>ANONYMOUS</auth>$<auth>ANONYMOUS</auth>\n  <allow_anonymous/>$' /etc/dbus-1/session.conf; fi
+
 echo ""
 echo "--- Preparing xfce4 environment ---"
 echo ""
 [ ! -d /etc/xdg.orig ] && cp -rpv /etc/xdg /etc/xdg.orig
-cp -rpv $SCRIPTPATH/config-files/xfce4-session.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml
+cp -rpv $CONFIGPATH/xfce4-session.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml
 
 [ ! -d ./config/xfce4.orig ] && mv ./config/xfce4 ./config/xfce4.orig
-cp -rpv SCRIPTPATH/config-files/xfce4 ./config
+cp -rpv $CONFIGPATH/xfce4 ./config
 
 echo ""
 echo "All done. Start X11 graphical userinterface with the command"
