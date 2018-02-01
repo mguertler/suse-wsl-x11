@@ -1,6 +1,7 @@
 #!/bin/bash
 #
 #
+
 POWERSHELL=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
 
 echo ""
@@ -10,17 +11,20 @@ echo ""
 OUT=$($POWERSHELL -command "Get-Process -name 'vcxsrv' | Format-List ProcessName" |grep "vcxsrv")
 if [ -n "$OUT" ]; then
 	echo ""
-	echo "VcXsrv already running."
+	echo "Info: VcXsrv already running."
 	echo ""
 else
 	"/mnt/c/Program Files/VcXsrv/vcxsrv.exe" :0 -ac -terminate -lesspointer -multiwindow -clipboard -wgl &
 	sleep 5
 fi
 
+echo ""
+echo "--- Setting up XFCE Panel ---"
+echo ""
 
-# Calculate new x-position (approx middle of the screen)  for XFCE start panel based on screen resolution
+# Calculate new x-position (approx middle of the screen) for XFCE panel based on screen resolution
 X_RES="\s*([[:digit:]]+)x([[:digit:]]+)"
-if [[ "$(xrandr | grep '*')" =~ $X_RES ]]; then
+if [[ "$(xrandr 2>/dev/null | grep '*')" =~ $X_RES ]]; then
 	X_POS=$(expr ${BASH_REMATCH[1]} / 2 - 60)
 fi
 
@@ -29,7 +33,26 @@ sed -e "s/<property name=\"position\" type=\"string\" value=\"p=\(.\+\);x=\(.\+\
 mv $FILE.new $FILE
 
 echo ""
-echo "--- Starting XFCE session ---"
+echo "--- Preparing Windows-Linux desktop integration ---"
 echo ""
 
-startxfce4
+echo -e ""
+echo -e "--- Starting XFCE session ---"
+echo -e ""
+echo -e "\e[93m"
+echo -e "####################################################"
+echo -e "###                                              ###"
+echo -e "###                                              ###"
+echo -e "###                                              ###"
+echo -e "###            \e[95m\e[1mDON'T CLOSE THIS WINDOW\e[21m\e[93m           ###"
+echo -e "###   \e[95mIt would close all running openSUSE apps\e[93m   ###"
+echo -e "###                                              ###"
+echo -e "###              \e[92m\e[1mHave a lot of fun!\e[21m\e[93m              ###"
+echo -e "###                                              ###"
+echo -e "###                                              ###"
+echo -e "###                                              ###"
+echo -e "####################################################"
+echo -e "\e[39m"
+echo ""
+
+startxfce4 >/dev/null 2>&1
