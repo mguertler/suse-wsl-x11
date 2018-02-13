@@ -14,5 +14,5 @@ PULSEAUDIO_LIN="$PROFILE_DIR_LIN/pulseaudio-windows-11.1-32bit"
 
 if [ -d "$PULSEAUDIO_LIN" ]; then
 	echo "$PULSEAUDIO_WIN\bin\pulseaudio.exe"
-	$POWERSHELL -C  "$PULSEAUDIO_WIN\bin\pulseaudio.exe"
+	$POWERSHELL -C  "start-process $PULSEAUDIO_WIN\bin\pulseaudio.exe"
 fi
