@@ -84,7 +84,7 @@ for USER in $USERS; do
 	then
 		echo "Info: Display forwarding already setup for $USER"
 	else
-		echo "export DISPLAY=\":0\"" >>$USER/.bashrc
+		echo "export DISPLAY=\"localhost:0.0\"" >>$USER/.bashrc
 	fi
 	# LIBGL
 	if grep -Fxq "export LIBGL_ALWAYS_INDIRECT=\"true\"" $USER/.bashrc
