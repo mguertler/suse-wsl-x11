@@ -3,6 +3,9 @@
 #
 
 POWERSHELL=/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe
+PROFILE_DIR_WIN=$($POWERSHELL -C "Write-Host \$env:USERPROFILE")
+PROFILE_DIR_LIN=$(echo "$PROFILE_DIR_WIN" | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g")
+WINDOWS_USERNAME="$(basename $PROFILE_DIR_LIN)"
 
 echo ""
 echo "--- Starting vcXsrv if it is not running ---"
@@ -16,6 +19,16 @@ if [ -n "$OUT" ]; then
 else
 	"/mnt/c/Program Files/VcXsrv/vcxsrv.exe" :0 -ac -terminate -lesspointer -multiwindow -clipboard -wgl &
 	sleep 5
+fi
+
+echo ""
+echo "--- Starting PulseAudio Server ---"
+echo ""
+PULSEAUDIO="$PROFILE_DIR_LIN/pulseaudio-windows-11.1-32bit"
+
+if [ -d "$PULSEAUDIO" ]; then
+	echo ""
+	#$PULSEAUDIO/bin/pulseaudio.exe
 fi
 
 echo ""
@@ -39,9 +52,6 @@ echo ""
 BOOKMARKS_DIR=~/.config/gtk-3.0
 BOOKMARKS_FILE=bookmarks
 DRIVES=$(ls /mnt/)
-PROFILE_DIR_WIN=$($POWERSHELL -C "Write-Host \$env:USERPROFILE")
-PROFILE_DIR_LIN=$(echo "$PROFILE_DIR_WIN" | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g")
-WINDOWS_USERNAME="$(basename $PROFILE_DIR_LIN)"
 
 mkdir -p $BOOKMARKS_DIR
 mkdir -p ~/windows

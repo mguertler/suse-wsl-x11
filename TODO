@@ -2,4 +2,4 @@ TODO:
 
 KNOWN ISSUES:
 * Packages don't get updated to latest version in update repositories
-* ssh X11 forwarding doesn't work
+SOLVED * ssh X11 forwarding doesn't work
