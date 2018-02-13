@@ -80,7 +80,7 @@ USERS="$USERS /root /etc/skel"
 
 for USER in $USERS; do
 	# Display Forwarding
-	if grep -Fxq "export DISPLAY=\":0\"" $USER/.bashrc
+	if grep -Fxq "export DISPLAY=\"localhost:0.0\"" $USER/.bashrc
 	then
 		echo "Info: Display forwarding already setup for $USER"
 	else
