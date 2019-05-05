@@ -68,7 +68,7 @@ zypper ref; zypper -y up
 echo ""
 echo "--- Installing patterns & packages ---"
 echo ""
-zypper install -y --recommends -t pattern yast2_basis x11 xfce gnome_basis
+zypper install -y --recommends --force-resolution -t pattern yast2_basis x11 xfce gnome_basis
 zypper install -y gnome-terminal
 
 echo ""
