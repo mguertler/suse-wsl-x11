@@ -32,16 +32,16 @@ MISCPATH="$SCRIPTPATH/misc-files"
 POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 CMD="/mnt/c/Windows/System32/cmd.exe"
 WINPATH_TEMPDIR=$($POWERSHELL -C "Write-Host \$env:TEMP")
-LINPATH_TEMPDIR=echo $WINPATH_TEMPDIR | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g"
+LINPATH_TEMPDIR=$(echo $WINPATH_TEMPDIR | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g")
 WINPATH_APPDATA_openSUSE=$($POWERSHELL -C "Write-Host \$env:LOCALAPPDATA\openSUSE")
-LINPATH_APPDATA_openSUSE=echo $WINPATH_LOCAL_APPDATA | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g"
+LINPATH_APPDATA_openSUSE=$(echo $WINPATH_LOCAL_APPDATA | sed -e "s/^\(.\):/\/mnt\/\L\1/" -e "s/\\\/\//g")
 
 echo ""
 echo "--- Downloading vcXsrv ---"
 echo ""
 LATEST="vcxsrv-latest.exe"
 wget -O /tmp/$LATEST https://sourceforge.net/projects/vcxsrv/files/latest/download
-mv /tmp/$LATEST $WINPATH_TEMPDIR
+mv /tmp/$LATEST $LINPATH_TEMPDIR
 
 echo ""
 echo "!!!                                                  !!!"
@@ -55,10 +55,10 @@ echo ""
 read -n 1 -s -r
 
 echo ""
-echo "--- Installing vcXsrv ---"
+echo "---     Installing vcXsrv   ---"
+echo "--- This might take a while ---"
 echo ""
-$CMD /c "$LINPATH_TEMPDIR/$LATEST /S"
-
+$CMD /c "$WINPATH_TEMPDIR/$LATEST /S"
 
 echo ""
 echo "--- Updating system ---"
