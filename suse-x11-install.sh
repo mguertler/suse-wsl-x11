@@ -107,13 +107,18 @@ sed -i 's$<auth>.*</auth>$<auth>ANONYMOUS</auth>$' /etc/dbus-1/session.conf
 if ! grep -Fq '<allow_anonymous/>' /etc/dbus-1/session.conf; then sed -i 's$<auth>ANONYMOUS</auth>$<auth>ANONYMOUS</auth>\n  <allow_anonymous/>$' /etc/dbus-1/session.conf; fi
 
 echo ""
-echo "--- Preparing xfce4 environment ---"
+echo "--- Preparing xfce4 environment (user root) ---"
 echo ""
 [ ! -d /etc/xdg.orig ] && cp -rpv /etc/xdg /etc/xdg.orig
 cp -rpv $CONFIGPATH/xfce4-session.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml
 
-[ ! -d ./config/xfce4.orig ] && mv ./config/xfce4 ./config/xfce4.orig
-cp -rpv $CONFIGPATH/xfce4 ./config
+for user in $(ls /home); do
+	echo ""
+	echo "--- Preparing xfce4 environment (user $user) ---"
+	echo ""
+	[ ! -d /home/$user/.config/xfce4.orig ] && mv /home/$user/.config/xfce4 /home/$user/.config/xfce4.orig
+	cp -rpv $CONFIGPATH/xfce4 /home/$user/.config
+done
 
 echo ""
 echo "--- Installing Pulseaudio for Windows ---"
