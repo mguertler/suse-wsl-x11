@@ -69,7 +69,7 @@ echo ""
 echo "--- Installing patterns & packages ---"
 echo ""
 zypper install -y --recommends --force-resolution -t pattern yast2_basis x11 xfce gnome_basis
-zypper install -y gnome-terminal
+zypper install -y gnome-terminal terminator
 
 echo ""
 echo "--- Configuring display forwarding and LIBGL rendering ---"
