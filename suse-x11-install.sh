@@ -86,6 +86,7 @@ for USER in $USERS; do
 	else
 		echo "export DISPLAY=\"localhost:0.0\"" >>$USER/.bashrc
 	fi
+	export DISPLAY="localhost:0.0"
 	# LIBGL
 	if grep -Fxq "export LIBGL_ALWAYS_INDIRECT=\"true\"" $USER/.bashrc
 	then
@@ -93,6 +94,7 @@ for USER in $USERS; do
 	else
 		echo "export LIBGL_ALWAYS_INDIRECT=\"true\"" >>$USER/.bashrc
 	fi
+	echo export LIBGL_ALWAYS_INDIRECT="true"
 done
 
 echo ""
@@ -120,9 +122,9 @@ for user in $(ls /home); do
 	cp -rpv $CONFIGPATH/xfce4 /home/$user/.config
 done
 
-echo ""
-echo "--- Installing Pulseaudio for Windows ---"
-echo ""
+#echo ""
+#echo "--- Installing Pulseaudio for Windows ---"
+#echo ""
 
 echo ""
 echo "All done. Start X11 graphical userinterface with the command"
